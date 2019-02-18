@@ -194,8 +194,12 @@ public class ConnectImpl implements Connect {
 	 * @throws Exception
 	 */
 	private void initConnect(Channel channel, String exchange, String type) throws Exception {
-		// Declare exchange 
-		channel.exchangeDeclare(exchange, type);
+		if (channel != null && exchange != null && type != null) {
+			// Declare exchange 
+			channel.exchangeDeclare(exchange, type);
+		} else {
+			System.out.println("Some argument is null");
+		}
 	}
 
 	/**
