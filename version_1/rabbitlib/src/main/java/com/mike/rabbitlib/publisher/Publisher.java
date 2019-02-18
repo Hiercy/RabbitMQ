@@ -9,6 +9,34 @@ public class Publisher {
 	public Publisher(ConnectImpl connectImpl) {
 		this.connectImpl = connectImpl;
 	}
+	
+	/**
+	 * Publish message
+	 * input host, message, exchangeName, exchangeType, queueName because type fanout no need routingKey
+	 * @param host
+	 * @param message
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @param queueName
+	 * @throws Exception
+	 */
+	public void publishForFanout(String host, String message, String exchangeName, String exchangeType, String queueName) throws Exception {
+		connectImpl.connectForFanout(host, message, exchangeName, exchangeType, queueName);
+	}
+	
+	/**
+	 * Publish message
+	 * input host, message, routingKey, exchangeName and exchangeType because type direct no need queue name
+	 * @param host
+	 * @param message
+	 * @param routingKey
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @throws Exception
+	 */
+	public void publishForDirect(String host, String message, String routingKey, String exchangeName, String exchangeType) throws Exception {
+		connectImpl.connectForDirect(host, message, routingKey, exchangeName, exchangeType);
+	}
 
 	/**
 	 * Publish message 

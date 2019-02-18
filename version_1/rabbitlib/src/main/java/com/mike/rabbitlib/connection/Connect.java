@@ -29,6 +29,30 @@ public interface Connect {
 	 * @throws Exception
 	 */
 	public void connectForSender(String host, String message, String routingKey, String exchangeName) throws Exception;
+	
+	/**
+	 * Connect for sender with host, message, exchange name
+	 * if its direct exchange type we don't need queueName because this will send with routingKey
+	 * @param host
+	 * @param message
+	 * @param routingKey
+	 * @param exchangeName
+	 * @param queueName
+	 * @throws Exception
+	 */
+	public void connectForDirect(String host, String message, String routingKey, String exchangeName, String exchangeType) throws Exception;
+	
+	/**
+	 * 
+	 * @param host
+	 * @param message
+	 * @param routingKey
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @param queueName
+	 * @throws Exception
+	 */
+	public void connectForFanout(String host, String message, String exchangeName, String exchangeType, String queueName) throws Exception;
 
 	/**
 	 * Connect with default host (localhost)

@@ -72,6 +72,7 @@ public class ConnectImpl implements Connect {
 
 		// Declare queue, exchange and bind them
 		initConnect(channel);
+		//		initConnect(channel, exchangeName);
 
 		// Send message
 		sendMessage(channel, message, routingKey, exchangeName);
@@ -80,6 +81,43 @@ public class ConnectImpl implements Connect {
 		closeConnection(channel, connection);
 	}
 
+	@Override
+	public void connectForDirect(String host, String message, String routingKey, String exchangeName, String exchangeType) throws Exception {
+		// Connect to the server
+		makeConnection(host);
+
+		// Declare exchange
+		if (exchangeType.equals("direct")) {
+			initConnect(channel, exchangeName, exchangeType);
+		} else {
+			System.out.println("This method used for direct exchange type only");
+		}
+		// Send message
+		sendMessage(channel, message, routingKey, exchangeName);
+
+		// Close connection
+		closeConnection(channel, connection);
+	}
+	
+
+	@Override
+	public void connectForFanout(String host, String message, String exchangeName, String exchangeType, String queueName) throws Exception {
+		// Connect to the server
+		makeConnection(host);
+
+		// Declare queue, exchange and bind them
+		if (exchangeType.equals("fanout")) {
+			initConnect(channel, exchangeName, exchangeType, queueName);
+		} else {
+			System.out.println("This method used for fanout exchange type only");
+		}
+		// Send message
+		sendMessage(channel, message, "", exchangeName);
+
+		// Close connection
+		closeConnection(channel, connection);
+		
+	}
 
 	@Override
 	public void connectForSenderWithoutHost(String message, String routingKey) throws Exception {
@@ -110,7 +148,7 @@ public class ConnectImpl implements Connect {
 		// Close connection
 		closeConnection(channel, connection);
 	}
-	
+
 	/**
 	 * Can add routingKey selection
 	 * @param channel
@@ -154,6 +192,7 @@ public class ConnectImpl implements Connect {
 	}
 
 	/**
+	 * DEFAULT
 	 * Initialize queue and exchange and bind them
 	 * @param channel
 	 * @param connection
@@ -167,7 +206,7 @@ public class ConnectImpl implements Connect {
 			// Declare queue
 			aqd  = channel.queueDeclare(Settings.QUEUE_NAME,   false, false, false, null);
 			aqd1 = channel.queueDeclare(Settings.QUEUE_NAME_2, false, false, false, null);
-			
+
 			// Bind a queue to an exchange
 			channel.queueBind(Settings.QUEUE_NAME,   Settings.EXCHANGE_NAME, "super");
 			channel.queueBind(Settings.QUEUE_NAME_2, Settings.EXCHANGE_NAME, "basic");
@@ -176,6 +215,35 @@ public class ConnectImpl implements Connect {
 			System.out.print("Cannot init queue and exchange ");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * MORE FLEXIBLE
+	 * Initialize queue and exchange
+	 * @param channel
+	 * @param exchange
+	 * @param type
+	 * @param queueName
+	 * @throws Exception
+	 */
+	private void initConnect(Channel channel, String exchange, String type, String queueName) throws Exception {
+		// Declare exchange 
+		channel.exchangeDeclare(exchange, type);
+		// Declare queue
+		channel.queueDeclare(queueName, false, false, false, null);
+	}
+
+	/**
+	 * MORE FLEXIBLE
+	 * Initialize exchange 
+	 * @param channel
+	 * @param exchange
+	 * @param type
+	 * @throws Exception
+	 */
+	private void initConnect(Channel channel, String exchange, String type) throws Exception {
+		// Declare exchange 
+		channel.exchangeDeclare(exchange, type);
 	}
 	
 	/**

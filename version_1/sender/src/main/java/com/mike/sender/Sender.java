@@ -23,5 +23,11 @@ public class Sender {
 		// publish without host
 		publisher.publishWithDefaultHost("bla-bla BASIC", "basic", "own_exchange");
 		publisher.publishWithDefaultHost("bla-bla SUPER", "super", "own_exchange");
+		
+		// publish for fanout type
+		publisher.publishForFanout("localhost", "HELLO FANOUT", "new_exchange", "fanout", "basic_queue");
+		
+		// publish for direct type
+		publisher.publishForDirect("localhost", "HELLO DIRECT", "basic", "own_exchange", "direct");
 	}
 }
