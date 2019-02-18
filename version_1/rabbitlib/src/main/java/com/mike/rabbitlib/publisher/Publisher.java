@@ -9,10 +9,39 @@ public class Publisher {
 	public Publisher(ConnectImpl connectImpl) {
 		this.connectImpl = connectImpl;
 	}
-	
+
 	/**
-	 * Publish message
-	 * input host, message, exchangeName, exchangeType, queueName because type fanout no need routingKey
+	 * Publish message for unknown type
+	 * input host, message, exchangeName, exchangeType, queueName, routingKey 
+	 * @param host
+	 * @param message
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @param queueName
+	 * @param routingKey
+	 * @throws Exception
+	 */
+	public void publish(String host, String message, String exchangeName, String exchangeType, String queueName, String routingKey) throws Exception {
+		connectImpl.connetcUnknownType(host, message, exchangeName, exchangeType, queueName, routingKey);
+	}
+
+	/**
+	 * Publish message for unknown exchange type 
+	 * input message, exchangeName, exchangeType, queueName and routingKey 
+	 * @param message
+	 * @param exchangeName
+	 * @param exchangeType
+	 * @param queueName
+	 * @param routingKey
+	 * @throws Exception
+	 */
+	public void publishWithDefaultHost(String message, String exchangeName, String exchangeType, String queueName, String routingKey) throws Exception {
+		connectImpl.connetcUnknownTypeWithDefaultHost(message, exchangeName, exchangeType, queueName, routingKey);
+	}
+
+	/**
+	 * Publish message for fanout
+	 * input host, message, exchangeName, queueName and routingKey  because type fanout no need routingKey
 	 * @param host
 	 * @param message
 	 * @param exchangeName
@@ -20,10 +49,25 @@ public class Publisher {
 	 * @param queueName
 	 * @throws Exception
 	 */
-	public void publishForFanout(String host, String message, String exchangeName, String exchangeType, String queueName) throws Exception {
-		connectImpl.connectForFanout(host, message, exchangeName, exchangeType, queueName);
+	public void publishForFanout(String host, String message, String exchangeName, String queueName) throws Exception {
+		connectImpl.connectForFanout(host, message, exchangeName, queueName);
+
+		// If Sender want to see what was send
+		//sended(message);
 	}
-	
+
+	/**
+	 * Publish message for fanout
+	 * input message, exchangeName, exchangeType, queueName and routingKey 
+	 * @param message
+	 * @param exchangeName
+	 * @param queueName
+	 * @throws Exception
+	 */
+	public void publishForFanoutWithDefaultHost(String message, String exchangeName, String queueName) throws Exception {
+		connectImpl.connectForFanoutWithDefaultHost(message, exchangeName, queueName);
+	}
+
 	/**
 	 * Publish message
 	 * input host, message, routingKey, exchangeName and exchangeType because type direct no need queue name
@@ -34,57 +78,19 @@ public class Publisher {
 	 * @param exchangeType
 	 * @throws Exception
 	 */
-	public void publishForDirect(String host, String message, String routingKey, String exchangeName, String exchangeType) throws Exception {
-		connectImpl.connectForDirect(host, message, routingKey, exchangeName, exchangeType);
+	public void publishForDirect(String host, String message, String routingKey, String exchangeName) throws Exception {
+		connectImpl.connectForDirect(host, message, routingKey, exchangeName);
 	}
 
 	/**
-	 * Publish message 
-	 * input host, message and routingKey
-	 * @param host
-	 * @param message
-	 * @param routingKey
-	 * @throws Exception
-	 */
-	public void publish(String host, String message, String routingKey) throws Exception {
-		connectImpl.connectForSender(host, message, routingKey);
-//		sended(message);
-	}
-
-	/**
-	 * Publish message 
-	 * input host, message, routingKey and exchangeName
-	 * @param host
+	 * 
 	 * @param message
 	 * @param routingKey
 	 * @param exchangeName
 	 * @throws Exception
 	 */
-	public void publish(String host, String message, String routingKey, String exchangeName) throws Exception {
-		connectImpl.connectForSender(host, message, routingKey, exchangeName);
-	}
-
-	/**
-	 * Publish message 
-	 * input message and routingKey with default host name
-	 * @param message
-	 * @param routingKey
-	 * @throws Exception
-	 */
-	public void publishWithDefaultHost(String message, String routingKey) throws Exception {
-		connectImpl.connectForSenderWithoutHost(message, routingKey);
-	}
-
-	/**
-	 * Publish message 
-	 * input message, routingKey and exchangeName with default host name
-	 * @param message
-	 * @param routingKey
-	 * @param exchangeName
-	 * @throws Exception
-	 */
-	public void publishWithDefaultHost(String message, String routingKey, String exchangeName) throws Exception {
-		connectImpl.connectForSenderWithoutHost(message, routingKey, exchangeName);
+	public void publishForDirectWithDefaultHost(String message, String routingKey, String exchangeName) throws Exception {
+		connectImpl.connectForDirectWithDefaultHost(message, routingKey, exchangeName);
 	}
 
 	/**
